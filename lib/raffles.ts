@@ -22,7 +22,7 @@ const raffleFields = "id,title,slug,description,prize_name,price_per_number,numb
 
 export async function getPublicRaffles() {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("raffles").select(raffleFields).in("status", ["active", "closed", "finished"]).order("draw_at", { ascending: true });
+  const { data, error } = await supabase.from("raffles").select(raffleFields).eq("status", "active").order("draw_at", { ascending: true });
   if (error) throw new Error(error.message);
   return (data ?? []) as PublicRaffle[];
 }
