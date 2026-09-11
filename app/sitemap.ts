@@ -1,3 +1,3 @@
 import type { MetadataRoute } from "next";
-import { demoRaffles } from "@/lib/demo";
-export default function sitemap(): MetadataRoute.Sitemap { const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"; return [{ url: base, changeFrequency: "daily", priority: 1 }, { url: `${base}/rifas`, changeFrequency: "daily", priority: .9 }, ...demoRaffles.map((raffle) => ({ url: `${base}/rifa/${raffle.slug}`, changeFrequency: "daily" as const, priority: .8 }))]; }
+import { getPublicRaffles } from "@/lib/raffles";
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> { const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"; const raffles = await getPublicRaffles(); return [{ url: base, changeFrequency: "daily", priority: 1 }, { url: `${base}/rifas`, changeFrequency: "daily", priority: .9 }, ...raffles.map((raffle) => ({ url: `${base}/rifa/${raffle.slug}`, changeFrequency: "daily" as const, priority: .8 }))]; }

@@ -1,0 +1,6 @@
+import Link from "next/link";
+import { ArrowLeft, CircleUserRound } from "lucide-react";
+import { requireAdmin } from "@/lib/auth/require-admin";
+import AdminProfileForm from "@/components/admin-profile-form";
+export const metadata = { title: "Mi perfil", robots: { index: false, follow: false } };
+export default async function AdminProfilePage(){const {user,supabase}=await requireAdmin();const {data:profile}=await supabase.from("profiles").select("full_name").eq("id",user.id).single();return <main className="min-h-screen bg-[#f7f8fc] px-5 py-6 md:px-10"><header className="mx-auto flex max-w-3xl items-center justify-between"><Link href="/admin" className="sans flex items-center gap-1 text-sm font-bold text-slate-500"><ArrowLeft className="h-4 w-4"/> Panel</Link><span className="sans text-xl font-black tracking-[-.06em]">RIFLY</span></header><section className="mx-auto max-w-3xl pb-20 pt-12"><CircleUserRound className="h-8 w-8 text-[#6d4aff]"/><h1 className="mt-5 text-5xl font-bold tracking-[-.07em]">Mi perfil.</h1><p className="mt-3 sans leading-7 text-slate-500">Actualiza tus datos de acceso al panel administrativo.</p><div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6 md:p-8"><AdminProfileForm initialName={profile?.full_name??"Administrador"} initialEmail={user.email??""}/></div></section></main>}
