@@ -1,4 +1,6 @@
-import Link from "next/link";
+import Form from "next/form";
+import LoadingButton from "@/components/loading-button";
+import Link from "@/components/loading-link";
 import AdminShell from "@/components/admin-shell";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import { money } from "@/lib/format";
@@ -24,10 +26,10 @@ export default async function BuyersPage({ searchParams }: { searchParams: Promi
   return <AdminShell><section className="mx-auto max-w-6xl px-5 py-8 md:px-8">
     <h2 className="text-4xl font-bold tracking-[-.06em]">Compradores.</h2>
     <p className="mt-3 sans text-sm text-slate-500">Clientes con pagos confirmados y sus números asociados a cada rifa.</p>
-    <form className="mt-7 flex flex-wrap items-end gap-3 rounded-2xl border border-slate-200 bg-white p-4 sans">
+    <Form action="" className="mt-7 flex flex-wrap items-end gap-3 rounded-2xl border border-slate-200 bg-white p-4 sans">
       <label className="min-w-48 flex-1 text-sm font-bold">Nombre o WhatsApp<input name="q" defaultValue={search} maxLength={80} placeholder="Buscar comprador" className="mt-2 block w-full rounded-xl border border-slate-200 p-3" /></label>
-      <button className="rounded-xl bg-[#6d4aff] px-5 py-3 text-sm font-bold text-white">Buscar</button><Link href="/admin/compradores" className="px-3 py-3 text-sm text-slate-500">Limpiar</Link>
-    </form>
+      <LoadingButton loadingText="Buscando..." className="rounded-xl bg-[#6d4aff] px-5 py-3 text-sm font-bold text-white">Buscar</LoadingButton><Link href="/admin/compradores" className="px-3 py-3 text-sm text-slate-500">Limpiar</Link>
+    </Form>
     {error ? <p role="alert" className="mt-6 rounded-xl bg-red-50 p-5 sans text-red-700">No pudimos cargar los compradores. Actualiza la página para intentar nuevamente.</p> : <>
       <p className="mt-5 sans text-sm text-slate-500">{count ?? 0} compradores encontrados</p>
       <div className="mt-4 space-y-5">{buyers.map((buyer) => {

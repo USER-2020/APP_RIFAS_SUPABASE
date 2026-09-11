@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import { ArrowUpRight, CircleDollarSign, Clock3, Ticket, Users } from "lucide-react";
 import AdminShell from "@/components/admin-shell";
 import { requireAdmin } from "@/lib/auth/require-admin";

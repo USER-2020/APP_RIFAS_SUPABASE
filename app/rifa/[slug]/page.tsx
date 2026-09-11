@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 /* eslint-disable @next/next/no-img-element */
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";

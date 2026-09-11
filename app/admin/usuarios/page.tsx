@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import AdminUserForm from "@/components/admin-user-form";
 import AdminUserList from "@/components/admin-user-list";

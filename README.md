@@ -30,6 +30,12 @@ La RPC `create_reservation` calcula el precio en PostgreSQL y bloquea la operaci
 
 ## Producción
 
+En Hostinger, configura `NEXT_PUBLIC_SITE_URL=https://rifly.online` antes de compilar y vuelve a desplegar después de cambiarla. Debe coincidir con el origen público que usa el navegador (protocolo, dominio y puerto, si existe). En local conserva `http://localhost:3000`.
+
+La API de confirmación y rechazo de reservas usa esta URL para validar el encabezado `Origin`, incluso cuando el proxy del hosting entrega una URL interna a Next.js. No requiere desactivar CORS ni confiar en encabezados reenviados. Las variables de Supabase deben usar los nombres `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` y `SUPABASE_SERVICE_ROLE_KEY` (esta última sólo en el servidor).
+
+Para comprobar la validación del origen: `node --import tsx --test lib/request-origin.test.ts`.
+
 Importa el repositorio en Vercel, configura las tres variables de entorno y despliega. Después de modificar SQL, ejecuta la migración en el proyecto Supabase. El manifest, robots, sitemap y metadata de cada rifa están preparados para compartir previews en redes sociales.This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

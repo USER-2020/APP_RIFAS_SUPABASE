@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import { ArrowLeft, Star } from "lucide-react";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import FeaturedRaffleForm from "@/components/featured-raffle-form";

@@ -1,4 +1,6 @@
-import Link from "next/link";
+import Form from "next/form";
+import LoadingButton from "@/components/loading-button";
+import Link from "@/components/loading-link";
 import AdminShell from "@/components/admin-shell";
 import AdminReservationActions from "@/components/admin-reservation-actions";
 import { requireAdmin } from "@/lib/auth/require-admin";
@@ -25,11 +27,11 @@ export default async function AdminReservationsPage({ searchParams }: { searchPa
   const pageUrl = (value: number) => `/admin/reservas?${new URLSearchParams({ status, code, page: String(value) })}`;
   return <AdminShell><section className="mx-auto max-w-6xl px-5 py-8 md:px-8">
     <h2 className="text-4xl font-bold tracking-[-.06em]">Reservas.</h2><p className="mt-3 sans text-sm text-slate-500">Valida los pagos, confirma las reservas o libera sus números.</p>
-    <form className="mt-7 flex flex-wrap items-end gap-3 rounded-2xl border border-slate-200 bg-white p-4 sans">
+    <Form action="" className="mt-7 flex flex-wrap items-end gap-3 rounded-2xl border border-slate-200 bg-white p-4 sans">
       <label className="min-w-48 flex-1 text-sm font-bold">Código de reserva<input name="code" defaultValue={code} placeholder="RF-043B3A" maxLength={40} className="mt-2 block w-full rounded-xl border border-slate-200 p-3 uppercase" /></label>
       <label className="text-sm font-bold">Estado<select name="status" defaultValue={status} className="mt-2 block rounded-xl border border-slate-200 bg-white p-3">{Object.entries(states).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
-      <button className="rounded-xl bg-[#6d4aff] px-5 py-3 text-sm font-bold text-white">Buscar</button><Link href="/admin/reservas" className="px-3 py-3 text-sm text-slate-500">Limpiar</Link>
-    </form>
+      <LoadingButton loadingText="Buscando..." className="rounded-xl bg-[#6d4aff] px-5 py-3 text-sm font-bold text-white">Buscar</LoadingButton><Link href="/admin/reservas" className="px-3 py-3 text-sm text-slate-500">Limpiar</Link>
+    </Form>
     {error ? <p role="alert" className="mt-6 rounded-xl bg-red-50 p-5 sans text-red-700">No pudimos cargar las reservas. Actualiza la página para intentar nuevamente.</p> : <>
       <p className="mt-5 sans text-sm text-slate-500">{count ?? 0} reservas encontradas · Horarios de Colombia</p>
       <div className="mt-4 space-y-4">{reservations.map((reservation) => {

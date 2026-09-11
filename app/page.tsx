@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import { ArrowUpRight, ChevronRight, Sparkles } from "lucide-react";
 import { getPublicRaffles, money, publicImageUrl } from "@/lib/raffles";
 

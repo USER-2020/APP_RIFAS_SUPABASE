@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import { CheckCircle2 } from "lucide-react";
 import { requireAdmin } from "@/lib/auth/require-admin";
 export const metadata = { title: "Rifa creada", robots: { index: false, follow: false } };

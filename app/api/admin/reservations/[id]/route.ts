@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { hasAllowedOrigin } from "@/lib/request-origin";
 
 const schema = z.object({ action: z.enum(["confirm", "release"]), reason: z.string().trim().max(500).optional() });
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  if (request.headers.get("origin") !== new URL(request.url).origin) return NextResponse.json({ error: "Origen no autorizado" }, { status: 403 });
+  if (!hasAllowedOrigin(request)) return NextResponse.json({ error: "Origen no autorizado" }, { status: 403 });
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Inicia sesión nuevamente" }, { status: 401 });

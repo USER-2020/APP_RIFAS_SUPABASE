@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import ReservationForm from "@/components/reservation-form";
 import { getPublicRaffleById } from "@/lib/raffles";
 

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/loading-link";
 import ReservationLookupForm from "@/components/reservation-lookup-form";
 
 export default function ReservationLookupPage() {
