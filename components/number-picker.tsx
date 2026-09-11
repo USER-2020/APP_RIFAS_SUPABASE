@@ -1,0 +1,11 @@
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { money } from "@/lib/demo";
+
+export default function NumberPicker({ numbers, price, raffleTitle }: { numbers: number[]; price: number; raffleTitle: string }) {
+  const [selected, setSelected] = useState<number[]>([]);
+  const toggle = (number: number) => setSelected((current) => current.includes(number) ? current.filter((item) => item !== number) : [...current, number]);
+  return <div className="mt-8"><div className="mb-5 flex flex-wrap gap-4 sans text-xs font-semibold text-slate-500"><span><i className="mr-1 inline-block h-3 w-3 rounded bg-white ring-1 ring-slate-200" /> Disponible</span><span><i className="mr-1 inline-block h-3 w-3 rounded bg-[#6d4aff]" /> Seleccionado</span><span><i className="mr-1 inline-block h-3 w-3 rounded bg-[#fef0c7]" /> Pendiente</span></div><div className="grid grid-cols-5 gap-2 sm:grid-cols-10">{numbers.map((number) => <button type="button" key={number} onClick={() => toggle(number)} aria-label={`Número ${number}`} aria-pressed={selected.includes(number)} className={`aspect-square rounded-xl border text-sm font-bold transition ${selected.includes(number) ? "border-[#6d4aff] bg-[#6d4aff] text-white shadow-lg shadow-[#6d4aff44]" : "border-slate-200 bg-white text-slate-600 hover:border-[#6d4aff] hover:text-[#6d4aff]"}`}>{String(number).padStart(numbers.length > 100 ? 3 : 2, "0")}</button>)}</div>{selected.length > 0 && <div className="sticky bottom-4 mt-8 flex items-center justify-between gap-4 rounded-2xl bg-[#101828] p-4 text-white shadow-2xl sans"><div><p className="text-xs text-slate-400">{selected.length} {selected.length === 1 ? "número" : "números"} seleccionados</p><strong>{money(selected.length * price)}</strong></div><Link href={`/reserva/demo?numbers=${selected.join(",")}&raffle=${encodeURIComponent(raffleTitle)}`} className="rounded-xl bg-[#6d4aff] px-4 py-3 text-sm font-bold">Continuar <ArrowRight className="ml-1 inline h-4 w-4" /></Link></div>}</div>;
+}
