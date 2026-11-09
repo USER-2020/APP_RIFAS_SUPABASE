@@ -75,11 +75,20 @@ app/
   admin/rifas/nueva/page.tsx       Wizard de creación de rifas
   admin/rifas/[id]/page.tsx        Confirmación básica de rifa creada
   admin/rifas/destacada/page.tsx   Selección de rifa destacada
+  admin/integraciones/page.tsx     Usuarios API, organizaciones, tokens y revocación
+  admin/recuperar/page.tsx         Solicitud de recuperación por SMTP de Supabase
+  admin/restablecer/page.tsx       Cambio de contraseña desde el enlace recibido
+  embed/rifa/[slug]/page.tsx       Selector de números para iframe con token temporal
   api/admin/profile/route.ts       Actualizar perfil admin
   api/admin/users/route.ts         Crear admin
   api/admin/users/[id]/route.ts    Editar/eliminar admin
   api/admin/raffles/route.ts       Crear rifa y subir portada
   api/admin/raffles/featured/...   Seleccionar destacada
+  api/admin/integrations/...       Crear y revocar integraciones API
+  api/v1/raffles                    Crear rifas desde plataformas externas
+  api/v1/raffles/[id]/participation-tokens
+                                    Emitir tokens temporales por compra
+  api/embed/participations/redeem   Confirmar la selección del iframe
 components/
   admin-shell.tsx                  Sidebar, navegación, logout y perfil
   raffle-create-form.tsx           Wizard de creación de rifa
@@ -169,6 +178,12 @@ El precio enviado desde el navegador no es confiable: el total definitivo debe v
 - Impedir que el usuario actual se elimine a sí mismo.
 
 Las operaciones sensibles utilizan `SUPABASE_SERVICE_ROLE_KEY` sólo en endpoints server-side.
+
+### Usuarios consumidores de la API
+
+`/admin/integraciones` crea un usuario consumidor (`api_consumers`), su organización, una integración y un token `rfly_live_...`. Este usuario no es un administrador de Supabase Auth: es la identidad técnica de una plataforma externa como REM. El token se muestra una sola vez, se almacena hasheado en Rifly y debe guardarse cifrado únicamente en el servidor consumidor.
+
+El servidor externo usa ese token para crear rifas y emitir tokens de participación ligados a una compra. El comprador recibe un `embedUrl` temporal; el iframe consulta la rifa y, al elegir los números, Rifly confirma directamente la reserva y la asocia con la compra y el usuario externo.
 
 ### Crear rifas
 

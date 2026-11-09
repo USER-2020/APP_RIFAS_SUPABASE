@@ -28,6 +28,14 @@ Configura `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` y `NEXT_PU
 
 La RPC `create_reservation` calcula el precio en PostgreSQL y bloquea la operación completa si algún número dejó de estar disponible. `confirm_reservation` y `reject_reservation` son atómicas y sólo aceptan administradores. La creación de usuarios admin usa la clave service role únicamente en el endpoint servidor `/api/admin/users`; nunca la pongas en una variable `NEXT_PUBLIC_*`.
 
+## Integración con otras plataformas
+
+Rifly puede ser consumida por plataformas como REM Experience mediante usuarios de API. En `/admin/integraciones`, un administrador crea el usuario consumidor, su organización y una integración. Rifly muestra un token `rfly_live_...` una sola vez; debe guardarse únicamente en el servidor de la plataforma externa, nunca en el navegador.
+
+La integración permite crear rifas con `POST /api/v1/raffles`. Para campañas ligadas a una compra, la plataforma externa valida la orden y solicita un token temporal con `POST /api/v1/raffles/{id}/participation-tokens`. La respuesta incluye un `embedUrl` para mostrar el selector de números de Rifly dentro de un iframe. Ese token temporal está limitado a una rifa, una compra, una cantidad máxima de números y una fecha de vencimiento. Al confirmar, Rifly valida y marca los números como confirmados sin revisión manual.
+
+La documentación completa está en [`docs/INTEGRATION_API.md`](docs/INTEGRATION_API.md).
+
 ## Producción
 
 En Hostinger, configura `NEXT_PUBLIC_SITE_URL=https://rifly.online` antes de compilar y vuelve a desplegar después de cambiarla. Debe coincidir con el origen público que usa el navegador (protocolo, dominio y puerto, si existe). En local conserva `http://localhost:3000`.

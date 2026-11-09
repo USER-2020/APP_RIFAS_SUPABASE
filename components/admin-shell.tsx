@@ -4,7 +4,7 @@ import Link from "@/components/loading-link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
-import { ChevronLeft, ChevronRight, CircleUserRound, LayoutDashboard, LogOut, Menu, Plus, ShieldCheck, Star, Ticket, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, CircleUserRound, LayoutDashboard, LogOut, Menu, PlugZap, Plus, ShieldCheck, Star, Ticket, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/browser";
 
 const navigation = [
@@ -14,6 +14,7 @@ const navigation = [
   { href: "/admin/rifas/nueva", label: "Nueva rifa", icon: Plus },
   { href: "/admin/rifas/destacada", label: "Destacada", icon: Star },
   { href: "/admin/usuarios", label: "Administradores", icon: ShieldCheck },
+  { href: "/admin/integraciones", label: "Integraciones", icon: PlugZap },
   { href: "/admin/perfil", label: "Mi perfil", icon: CircleUserRound },
 ];
 
