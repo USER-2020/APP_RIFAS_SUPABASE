@@ -115,9 +115,15 @@ Rifly devuelve `embedUrl`. REM debe mostrar esa URL en un iframe. El token de pa
 
 Al confirmar, Rifly valida la cantidad permitida, bloquea los números y crea la reserva como confirmada. No requiere revisión manual del administrador.
 
+Si el token contiene un correo del cliente y Rifly tiene configurado Resend, después de confirmar se envía un correo con los números, el código de reserva, la fecha y el total. El envío no revierte la participación si el proveedor falla. Los envíos quedan registrados en participation_tokens.confirmation_email_sent_at; un administrador puede reintentar un envío pendiente mediante POST /api/admin/reservations/{RESERVATION_ID}/confirmation-email.
+
 ## Endpoints previstos
 
 - `GET /api/v1/raffles/:id`
 - `PATCH /api/v1/raffles/:id`
 - `GET /api/v1/raffles/:id/reservations`
 - Webhooks para reservas, pagos y ganadores.
+
+## Correo de confirmación
+
+Configura RESEND_API_KEY y MAIL_FROM únicamente en el servidor. El dominio de MAIL_FROM debe estar verificado en Resend. Ejecuta npm test para validar el flujo de correo.

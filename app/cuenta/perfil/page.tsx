@@ -1,0 +1,9 @@
+import OrganizerShell from "@/components/organizer-shell";
+import { requireOrganizer } from "@/lib/auth/require-organizer";
+
+export const metadata = { title: "Mi perfil | Rifly", robots: { index: false, follow: false } };
+
+export default async function OrganizerProfilePage() {
+  const { user, consumer, organization } = await requireOrganizer();
+  return <OrganizerShell><div className="mx-auto max-w-5xl px-5 py-8 md:px-8"><p className="sans text-xs font-bold uppercase tracking-[.16em] text-[#6d4aff]">Cuenta</p><h2 className="mt-2 text-5xl font-bold tracking-[-.07em]">Mi perfil.</h2><p className="mt-3 sans text-slate-500">Información de acceso y espacio de organización.</p><div className="mt-8 grid gap-6 md:grid-cols-2"><section className="rounded-3xl border border-slate-200 bg-white p-6"><h3 className="text-2xl font-bold">Datos de acceso</h3><dl className="mt-5 space-y-4 sans"><div><dt className="text-xs font-bold uppercase tracking-[.12em] text-slate-400">Correo</dt><dd className="mt-1 text-slate-700">{user.email}</dd></div><div><dt className="text-xs font-bold uppercase tracking-[.12em] text-slate-400">Cuenta API</dt><dd className="mt-1 text-slate-700">{consumer.name}</dd></div></dl></section><section className="rounded-3xl border border-slate-200 bg-white p-6"><h3 className="text-2xl font-bold">Tu organización</h3><dl className="mt-5 space-y-4 sans"><div><dt className="text-xs font-bold uppercase tracking-[.12em] text-slate-400">Nombre</dt><dd className="mt-1 text-slate-700">{organization.name}</dd></div><div><dt className="text-xs font-bold uppercase tracking-[.12em] text-slate-400">Identificador</dt><dd className="mt-1 text-slate-700">{organization.slug}</dd></div></dl></section></div><p className="mt-6 rounded-2xl bg-[#eeeaff] p-5 sans text-sm leading-6 text-[#4a32b9]">Tu información está protegida. El token de API sólo debe utilizarse desde el backend de tu proyecto y nunca en el navegador.</p></div></OrganizerShell>;
+}
