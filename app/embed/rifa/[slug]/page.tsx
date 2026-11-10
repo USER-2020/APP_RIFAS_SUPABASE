@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { normalizeRaffleSlug } from "@/lib/raffles";
 import ParticipationPicker from "@/components/participation-picker";
 import { findParticipationToken } from "@/lib/api/participation-token";
 
@@ -9,7 +10,7 @@ export default async function EmbeddedRafflePage({ params, searchParams }: { par
   const { slug } = await params;
   const { claim } = await searchParams;
   if (!claim) return <EmbedMessage title="Enlace incompleto" text="Solicita un nuevo enlace de participación." />;
-  const token = await findParticipationToken(claim, slug);
+  const token = await findParticipationToken(claim, normalizeRaffleSlug(slug));
   if (!token) return <EmbedMessage title="Enlace no disponible" text="Este enlace venció, ya fue utilizado o no corresponde a esta rifa." />;
   const supabase = await createClient();
   const { data: numbers } = await supabase.from("raffle_numbers").select("number,status").eq("raffle_id", token.raffle_id).order("number");

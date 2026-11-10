@@ -16,7 +16,7 @@ export async function GET() {
   const user = await currentUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
   const admin = createAdminClient();
-  const { data } = await admin.from("api_consumers").select("id,name,email,active,integrations(id,name,provider_key,active,organizations(name),integration_tokens(id,token_prefix,scopes,revoked_at,last_used_at,created_at))").eq("owner_user_id", user.id).maybeSingle();
+  const { data } = await admin.from("api_consumers").select("id,name,email,active,integrations(id,name,provider_key,active,organizations(name),integration_tokens(id,token_prefix,scopes,expires_at,revoked_at,last_used_at,created_at))").eq("owner_user_id", user.id).maybeSingle();
   return NextResponse.json({ consumer: data });
 }
 
