@@ -3,7 +3,7 @@ import LoadingButton from "@/components/loading-button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function AdminReservationActions({ id, code, overdue }: { id: string; code: string; overdue: boolean }) {
+export default function AdminReservationActions({ id, code, overdue, endpoint = "/api/admin/reservations" }: { id: string; code: string; overdue: boolean; endpoint?: string }) {
   const router = useRouter();
   const [action, setAction] = useState<"confirm" | "release" | null>(null);
   const [reason, setReason] = useState("");
@@ -15,7 +15,7 @@ export default function AdminReservationActions({ id, code, overdue }: { id: str
     if (busy) return;
     setBusy(true); setError("");
     try {
-      const response = await fetch(`/api/admin/reservations/${id}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, reason }) });
+      const response = await fetch(`${endpoint}/${id}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action, reason }) });
       const result = await response.json();
       if (!response.ok) { setError(result.error ?? "No pudimos actualizar la reserva"); return; }
       setDone(action === "confirm" ? "Reserva confirmada." : "Reserva rechazada. Números liberados.");
