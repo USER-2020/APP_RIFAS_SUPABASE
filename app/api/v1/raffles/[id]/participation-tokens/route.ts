@@ -27,7 +27,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   if (!raffle) return NextResponse.json({ error: "Rifa no encontrada para esta integración" }, { status: 404 });
   if (raffle.status !== "active" || new Date(raffle.sales_close_at) <= new Date()) return NextResponse.json({ error: "La rifa no está disponible" }, { status: 409 });
   const phoneNormalized = data.customer.phone.replace(/\D/g, "");
-  const rawToken = `rfly_claim_${randomBytes(24).toString("base64url")}`;
+  // Keep the random segment hexadecimal. The database contract for token_prefix
+  // intentionally accepts only alphanumeric characters, while base64url can
+  // generate '-' and '_', causing intermittent participation_token_prefix_check
+  // failures before the embed URL is ever returned to the consumer.
+  const rawToken = `rfly_claim_${randomBytes(24).toString("hex")}`;
   const { data: token, error } = await admin.from("participation_tokens").insert({ integration_id: authentication.context.integrationId, raffle_id: raffle.id, external_purchase_id: data.externalPurchaseId, external_user_id: data.externalUserId ?? null, customer_name: data.customer.name, customer_email: data.customer.email ?? null, customer_phone: data.customer.phone, customer_phone_normalized: phoneNormalized, token_prefix: rawToken.slice(0, 19), token_hash: createHash("sha256").update(rawToken).digest("hex"), allowed_numbers: data.allowedNumbers, expires_at: expiresAt.toISOString() }).select("id,allowed_numbers,expires_at").single();
   if (error || !token) return NextResponse.json({ error: error?.code === "23505" ? "Esta compra ya tiene un token de participación" : error?.message ?? "No se pudo crear el token" }, { status: error?.code === "23505" ? 409 : 400 });
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "";

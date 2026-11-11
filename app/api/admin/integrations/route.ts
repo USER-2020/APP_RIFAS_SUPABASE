@@ -49,7 +49,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: integrationError?.message ?? "No se pudo crear la integración" }, { status: 400 });
   }
 
-  const rawToken = `rfly_live_${randomBytes(24).toString("base64url")}`;
+  // Keep the token alphabet compatible with integration_token_prefix_check.
+  const rawToken = `rfly_live_${randomBytes(24).toString("hex")}`;
   const tokenPrefix = rawToken.slice(0, 18);
   const { error: tokenError } = await admin.from("integration_tokens").insert({
     integration_id: integration.id,

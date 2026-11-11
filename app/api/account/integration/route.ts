@@ -35,7 +35,8 @@ export async function POST(request: Request) {
   const providerKey = `self-${user.id.slice(0, 8)}-${randomBytes(3).toString("hex")}`;
   const { data: integration, error: integrationError } = await admin.from("integrations").insert({ api_consumer_id: consumer.id, organization_id: organization.id, name: parsed.data.name, provider_key: providerKey, created_by: user.id }).select("id,provider_key").single();
   if (integrationError || !integration) { await admin.from("organizations").delete().eq("id", organization.id); await admin.from("api_consumers").delete().eq("id", consumer.id); return NextResponse.json({ error: integrationError?.message ?? "No se pudo crear la integración" }, { status: 400 }); }
-  const token = `rfly_live_${randomBytes(24).toString("base64url")}`;
+  // Keep the token alphabet compatible with integration_token_prefix_check.
+  const token = `rfly_live_${randomBytes(24).toString("hex")}`;
   const { error: tokenError } = await admin.from("integration_tokens").insert({ integration_id: integration.id, token_prefix: token.slice(0, 18), token_hash: createHash("sha256").update(token).digest("hex"), scopes: ["raffles:read", "raffles:write"] });
   if (tokenError) { await admin.from("integrations").delete().eq("id", integration.id); await admin.from("organizations").delete().eq("id", organization.id); await admin.from("api_consumers").delete().eq("id", consumer.id); return NextResponse.json({ error: tokenError.message }, { status: 400 }); }
   return NextResponse.json({ token, warning: "Guarda este token ahora. No volverá a mostrarse." }, { status: 201 });

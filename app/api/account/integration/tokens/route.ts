@@ -18,7 +18,8 @@ export async function POST() {
   const { data: integration } = await admin.from("integrations").select("id").eq("api_consumer_id", consumer.id).eq("active", true).maybeSingle();
   if (!integration) return NextResponse.json({ error: "No tienes una integración activa." }, { status: 404 });
 
-  const token = `rfly_live_${randomBytes(24).toString("base64url")}`;
+  // The prefix constraint allows only alphanumeric characters after rfly_live_.
+  const token = `rfly_live_${randomBytes(24).toString("hex")}`;
   const { data: tokenRecord, error } = await admin.from("integration_tokens").insert({
     integration_id: integration.id,
     token_prefix: token.slice(0, 18),
