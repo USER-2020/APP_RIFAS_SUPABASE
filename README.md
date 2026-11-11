@@ -36,6 +36,8 @@ La integración permite crear rifas con `POST /api/v1/raffles`. Para campañas l
 
 La documentación completa está en [`docs/INTEGRATION_API.md`](docs/INTEGRATION_API.md).
 
+REM puede continuar usando la API REST directamente. El SDK `@rifly/sdk` es opcional y ofrece métodos TypeScript sobre los mismos endpoints, tokens, permisos y embeds. Debe ejecutarse en el backend de REM; la PWA sólo debe comunicarse con el backend propio de REM.
+
 ## Producción
 
 En Hostinger, configura `NEXT_PUBLIC_SITE_URL=https://rifly.online` antes de compilar y vuelve a desplegar después de cambiarla. Debe coincidir con el origen público que usa el navegador (protocolo, dominio y puerto, si existe). En local conserva `http://localhost:3000`.

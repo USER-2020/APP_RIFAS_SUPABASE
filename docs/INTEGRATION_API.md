@@ -124,6 +124,48 @@ Si el token contiene un correo del cliente y Rifly tiene configurado Resend, des
 - `GET /api/v1/raffles/:id/reservations`
 - Webhooks para reservas, pagos y ganadores.
 
+## API REST directa o SDK
+
+La integración actual de REM sigue siendo válida y no necesita instalar el SDK. REM puede continuar enviando peticiones HTTP directamente a los endpoints `/api/v1` con su token Bearer.
+
+El SDK de Rifly es una alternativa opcional que encapsula esas mismas peticiones. No crea una API diferente ni cambia el modelo de seguridad: utiliza los mismos tokens, permisos, organizaciones, rifas y URLs de embed.
+
+| Opción | Uso recomendado |
+| --- | --- |
+| API REST directa | REM ya tiene su cliente HTTP o necesita controlar completamente las peticiones. |
+| `@rifly/sdk` | Proyectos TypeScript que prefieren métodos tipados y manejo centralizado de errores. |
+
+### Uso del SDK desde REM
+
+El SDK debe instalarse y ejecutarse en el backend de REM, nunca en el navegador:
+
+```ts
+import { createRiflyClient } from "@rifly/sdk";
+
+const rifly = createRiflyClient({
+  baseUrl: process.env.RIFLY_URL ?? "https://rifly.online",
+  token: process.env.RIFLY_API_TOKEN!,
+});
+
+const raffle = await rifly.createRaffle({
+  title: "Rifa de experiencia",
+  slug: "rifa-de-experiencia",
+  description: "Participa y gana una experiencia.",
+  prizeName: "Experiencia premium",
+  pricePerNumber: 25000,
+  numberStart: 0,
+  numberEnd: 99,
+  salesCloseAt: "2026-12-01T20:00:00-05:00",
+  drawAt: "2026-12-05T20:00:00-05:00",
+  drawMethod: "Sorteo en vivo",
+  status: "draft",
+});
+```
+
+El SDK también expone `getRaffle`, `updateRaffle`, `uploadRaffleImage` y `createParticipationToken`. La PWA o frontend de REM debe llamar a un endpoint propio de REM; ese endpoint usa el SDK y conserva `RIFLY_API_TOKEN` en variables de entorno o un gestor de secretos.
+
+La documentación específica está en [`sdk/rifly/README.md`](../sdk/rifly/README.md) y la arquitectura multiplataforma en [`docs/SDK_ARCHITECTURE.md`](SDK_ARCHITECTURE.md).
+
 ## Correo de confirmación
 
 Configura RESEND_API_KEY y MAIL_FROM únicamente en el servidor. El dominio de MAIL_FROM debe estar verificado en Resend. Ejecuta npm test para validar el flujo de correo.

@@ -1,0 +1,17 @@
+{
+  "name": "@rifly/sdk",
+  "version": "0.1.0",
+  "description": "SDK multiplataforma para integrar Rifly desde servidores y backends de aplicaciones web/móviles.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "files": ["src", "README.md"],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  }
+}
