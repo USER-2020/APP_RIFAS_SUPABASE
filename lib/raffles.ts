@@ -26,6 +26,10 @@ export function normalizeRaffleSlug(value: string) {
   return value.replace(/-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i, "");
 }
 
+export function raffleSlugCandidates(value: string) {
+  return [...new Set([value, normalizeRaffleSlug(value)])];
+}
+
 export async function getPublicRaffles() {
   const supabase = await createClient();
   const { data, error } = await supabase.from("raffles").select(raffleFields).eq("status", "active").order("draw_at", { ascending: true });
@@ -35,7 +39,7 @@ export async function getPublicRaffles() {
 
 export async function getPublicRaffleBySlug(slug: string) {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("raffles").select(raffleFields).eq("slug", normalizeRaffleSlug(slug)).in("status", ["active", "closed", "finished"]).maybeSingle();
+  const { data, error } = await supabase.from("raffles").select(raffleFields).in("slug", raffleSlugCandidates(slug)).in("status", ["active", "closed", "finished"]).maybeSingle();
   if (error || !data) return null;
   return data as PublicRaffle;
 }
